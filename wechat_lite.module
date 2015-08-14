@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ *
+ * Module entry file.
+ *
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function wechat_lite_menu() {
+
+  $items['admin/config/system/wechat_lite'] = array(
+    'title'       => 'WeChat Lite',
+    'description' => 'Allow site to connect to WeChat Accounts.',
+    'position'    => 'right',
+    'weight'      => 10,
+    'file'           => 'system.admin.inc',
+    'page callback'  => 'system_admin_menu_block_page',
+    'file path'      => drupal_get_path('module', 'system'),
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
