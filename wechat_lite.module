@@ -12,14 +12,23 @@
 function wechat_lite_menu() {
 
   $items['admin/config/system/wechat_lite'] = array(
-    'title'       => 'WeChat Lite',
+    'title' => 'WeChat Lite',
     'description' => 'Allow site to connect to WeChat Accounts.',
-    'position'    => 'right',
-    'weight'      => 10,
-    'file'           => 'system.admin.inc',
-    'page callback'  => 'system_admin_menu_block_page',
-    'file path'      => drupal_get_path('module', 'system'),
+    'weight' => 10,
+    'file' => 'system.admin.inc',
+    'page callback' => 'system_admin_menu_block_page',
+    'file path' => drupal_get_path('module', 'system'),
     'access arguments' => array('administer site configuration'),
+  );
+
+  $items['admin/config/system/wechat_lite/service-accounts'] = array(
+    'title' => 'Service Accounts',
+    'description' => 'Configure WeChat Service Accounts.',
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'wechat_lite.admin.inc',
+    'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
+    'page arguments' => array('wechat_lite_service_accounts_settings'),         // 此值会被当参数传入
+    'access arguments' => array('administer site configuration'),               // 用户需要此权限才能看到这个菜单
   );
 
   return $items;
