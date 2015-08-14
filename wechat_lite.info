@@ -1,1 +1,7 @@
 name = WeChat Lite
+description = Connect Drupal application to WeChat Accounts.
+package = Third-party Integration
+core = 7.x
+php = 5.4
+configure = admin/config/wechat_lite/settings
+
