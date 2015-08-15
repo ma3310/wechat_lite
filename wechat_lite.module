@@ -31,5 +31,15 @@ function wechat_lite_menu() {
     'access arguments' => array('administer site configuration'),               // 用户需要此权限才能看到这个菜单
   );
 
+  $items['admin/config/system/wechat_lite/service-accounts/add'] = array(
+    'title' => 'Add Service Account',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 1,
+    'file' => 'wechat_lite.admin.inc',
+    'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
+    'page arguments' => array('wechat_lite_service_account_form'),
+  );
+
   return $items;
 }
