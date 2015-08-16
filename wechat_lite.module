@@ -21,7 +21,7 @@ function wechat_lite_menu() {
     'access arguments' => array('administer site configuration'),
   );
 
-  $items['admin/config/system/wechat_lite/service-accounts'] = array(
+  $items['admin/config/system/wechat_lite/service_accounts'] = array(
     'title' => 'Service Accounts',
     'description' => 'Configure WeChat Service Accounts.',
     'type' => MENU_NORMAL_ITEM,
@@ -31,7 +31,7 @@ function wechat_lite_menu() {
     'access arguments' => array('administer site configuration'),               // 用户需要此权限才能看到这个菜单
   );
 
-  $items['admin/config/system/wechat_lite/service-accounts/add'] = array(
+  $items['admin/config/system/wechat_lite/service_accounts/add'] = array(
     'title' => 'Add Service Account',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_LOCAL_ACTION,
