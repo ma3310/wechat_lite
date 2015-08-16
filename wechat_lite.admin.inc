@@ -19,7 +19,7 @@ require_once realpath(dirname(__FILE__)) . '/include/common.inc';
  */
 function service_accounts_segment_exists($segment) {
 
-  $service_accounts = variable_get(WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
 
   $ret = FALSE;
   if (isset($service_accounts[$segment])) {
@@ -57,8 +57,8 @@ function wechat_lite_service_account_form($form, &$form_state, $account = NULL) 
     $account = (object) array(
       'name' => '',
       'segment' => '',
-      'app_id' => '',
-      'app_secret' => '',
+      'appid' => '',
+      'appsecret' => '',
       'token' => '',
     );
   }
@@ -83,20 +83,20 @@ function wechat_lite_service_account_form($form, &$form_state, $account = NULL) 
     '#disabled' => !empty($account->segment),
   );
 
-  $form['app_id'] = array(
+  $form['appid'] = array(
     '#type' => 'textfield',
     '#title' => t('AppID'),
     '#size' => 20,
-    '#default_value' => $account->app_id,
+    '#default_value' => $account->appid,
     '#required' => TRUE,
   );
 
-  $form['app_secret'] = array(
+  $form['appsecret'] = array(
     '#type' => 'textfield',
     '#title' => t('Secret'),
     '#description' => t('Get this information from privilege management sub-page of settings page.<br>
 Application has to be put in non-SystemAdmin group first, then use Secret of that group.'),
-    '#default_value' => $account->app_secret,
+    '#default_value' => $account->appsecret,
     '#required' => TRUE,
   );
 
@@ -122,15 +122,15 @@ function wechat_lite_service_account_form_submit ($form, &$form_state){
   $account = array(
     'name' => $form['name']['#value'],
     'segment' => $form['segment']['#value'],
-    'app_id' => $form['app_id']['#value'],
-    'app_secret' => $form['app_secret']['#value'],
+    'appid' => $form['appid']['#value'],
+    'appsecret' => $form['appsecret']['#value'],
     'token' => $form['token']['#value'],
     'weight' => 0,
   );
 
-  $service_accounts = variable_get(WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
   $service_accounts[$account['segment']] = $account;
-  variable_set(WECHAT_LITE_SERVICE_ACCOUNTS, $service_accounts);
+  variable_set(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, $service_accounts);
 
   $form_state['redirect'] = 'admin/config/system/wechat_lite/service_accounts';
 
@@ -150,7 +150,7 @@ function wechat_lite_service_accounts_settings() {
 
   $form['#tree'] = true;
 
-  $service_accounts = variable_get(WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
 
   $form['#submit'][] = 'wechat_lite_service_accounts_settings_submit';
 
