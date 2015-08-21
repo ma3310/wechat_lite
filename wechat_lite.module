@@ -11,44 +11,76 @@
  */
 function wechat_lite_menu() {
 
-  // just create admin block
-  $items['admin/config/system/wechat_lite'] = array(
-    'title' => 'WeChat Lite',
-    'description' => 'Allow site to connect to WeChat Accounts.',
-    'page callback' => 'system_admin_menu_block_page',
-    'weight' => 10,
-    'file' => 'system.admin.inc',
-    'file path' => drupal_get_path('module', 'system'),
-    'access arguments' => array('administer site configuration'),
-  );
+    $items['wechat_lite'] = array(
+        'title' => 'wechat',
+        'description' => 'wechat_lite callback',
+        'page callback' => 'wechat_lite_callback',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'wechat_lite.service_account.inc',
+    );
 
-  $items['admin/config/system/wechat_lite/service_accounts'] = array(
-    'title' => 'Service Accounts',
-    'description' => 'Configure WeChat Service Accounts.',
-    'type' => MENU_NORMAL_ITEM,
-    'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
-    'page arguments' => array('wechat_lite_service_accounts_settings'),         // 此值会被当参数传入
-    'file' => 'wechat_lite.admin.inc',
-    'access arguments' => array('administer site configuration'),               // 用户需要此权限才能看到这个菜单
-  );
+    $items['wechat_lite_oauth2'] = array(
+        'title' => 'wechat',
+        'description' => 'oauth2 callback',
+        'page callback' => 'oauth2_callback',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+        'file' => 'wechat_lite.service_account.inc',
+    );
 
-  $items['admin/config/system/wechat_lite/service_accounts/add'] = array(
-    'title' => 'Add Service Account',
-    'type' => MENU_LOCAL_ACTION,
-    'weight' => 1,
-    'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
-    'page arguments' => array('wechat_lite_service_account_form'),
-    'file' => 'wechat_lite.admin.inc',
-    'access arguments' => array('administer site configuration'),
-  );
+    // just create admin block
+    $items['admin/config/system/wechat_lite'] = array(
+        'title' => 'WeChat Lite',
+        'description' => 'Allow site to connect to WeChat Accounts.',
+        'page callback' => 'system_admin_menu_block_page',
+        'weight' => 10,
+        'file' => 'system.admin.inc',
+        'file path' => drupal_get_path('module', 'system'),
+        'access arguments' => array('administer site configuration'),
+    );
 
-  $items['wechat_lite/service_account/%/server'] = array(
-    'type' => MENU_LOCAL_ACTION,
-    'page callback' => 'service_account_server',
-    'page arguments' => array(2),
-    'file' => 'wechat_lite.service_account.inc',
-    'access callback' => TRUE,
-  );
+    $items['admin/config/system/wechat_lite/service_accounts'] = array(
+        'title' => 'Service Accounts',
+        'description' => 'Configure WeChat Service Accounts.',
+        'type' => MENU_NORMAL_ITEM,
+        'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
+        'page arguments' => array('wechat_lite_service_accounts_settings'),         // 此值会被当参数传入
+        'file' => 'wechat_lite.admin.inc',
+        'access arguments' => array('administer site configuration'),               // 用户需要此权限才能看到这个菜单
+    );
 
-  return $items;
+    $items['admin/config/system/wechat_lite/service_accounts/add'] = array(
+        'title' => 'Add Service Account',
+        'type' => MENU_LOCAL_ACTION,
+        'weight' => 1,
+        'page callback' => 'drupal_get_form',                                       // 访问此配置时，此函数会被调用
+        'page arguments' => array('wechat_lite_service_account_form'),
+        'file' => 'wechat_lite.admin.inc',
+        'access arguments' => array('administer site configuration'),
+    );
+
+    $items['wechat_lite/service_account/%/server'] = array(
+        'type' => MENU_LOCAL_ACTION,
+        'page callback' => 'service_account_server',
+        'page arguments' => array(2),
+        'file' => 'wechat_lite.service_account.inc',
+        'access callback' => TRUE,
+    );
+
+    return $items;
+}
+
+function _wechat_lite_init_obj() {
+    $wechat_lite_obj = &drupal_static(__FUNCTION__);
+    if (!isset($wechat_lite_obj)) {
+        module_load_include('php', 'wechat_lite', 'sdk/wechat.class');
+        $options = array(
+            'token' => 'weixin',                         //variable_get('wechat_token', ""),
+            'appid' => 'wxfe118b6272f0ee34',              //variable_get('wechat_appid', ""),
+            'appsecret' => '12e5e5e0e7a46e009b02286dfb79d30e',                                             //variable_get('wechat_appsecret', ""),
+        );
+        $wechat_lite_obj = new Wechat($options);
+    }
+    return $wechat_lite_obj;
 }
