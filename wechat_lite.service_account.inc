@@ -98,7 +98,6 @@ function wechat_lite_callback(){
 function oauth2_callback(){
 
     $wechat_lite_obj = _wechat_lite_init_obj();
-    $wechat_lite_obj->valid();
 
     $node = $_GET['state'];
     $userinfo = $wechat_lite_obj->getOauthAccessToken();
@@ -124,7 +123,7 @@ function oauth2_callback(){
         $user = user_load($uid);
         $form_state = array();
         $form_state['uid'] = $uid;
-        user_login(array(),$form_state);
+        user_login_submit(array(),$form_state);
         drupal_session_regenerate();
         drupal_goto('node/'.$node);
     }
