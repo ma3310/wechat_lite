@@ -19,14 +19,14 @@ require_once realpath(dirname(__FILE__)) . '/include/common.inc';
  */
 function service_accounts_segment_exists($segment) {
 
-    $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
 
-    $ret = FALSE;
-    if (isset($service_accounts[$segment])) {
-        $ret = TRUE;
-    }
+  $ret = FALSE;
+  if (isset($service_accounts[$segment])) {
+    $ret = TRUE;
+  }
 
-    return $ret;
+  return $ret;
 }
 
 /**
@@ -49,90 +49,94 @@ function service_accounts_segment_exists($segment) {
  * @see wechat_lite_service_account_form_submit()
  * @ingroup forms
  */
-function wechat_lite_service_account_form($form, &$form_state, $account = NULL) {
+function wechat_lite_service_account_form($form, &$form_state, $account_segment = NULL) {
 
-    // if $account is empty, need initial $account, treat current as Account Adding
-    if (!isset($account->name)) {
-        drupal_set_title(t('Add WeChat Service Account'));
-        $account = (object) array(
-            'name' => '',
-            'segment' => '',
-            'appid' => '',
-            'appsecret' => '',
-            'token' => '',
-        );
-    }
-
-    $form['name'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Account Name'),
-        '#description' => t('Give a name to identify each WeChat Service Account.'),
-        '#size' => 20,
-        '#default_value' => $account->name,
-        '#required' => TRUE,
+  // if $account is empty, need initial $account, treat this situation as Account Adding
+  if (!isset($account_segment)) {
+    drupal_set_title(t('Add WeChat Service Account'));
+    $account = (object) array(
+      'name' => '',
+      'segment' => '',
+      'appid' => '',
+      'appsecret' => '',
+      'token' => '',
     );
+  }
+  else {
+    $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
+    $account = (object)$service_accounts[$account_segment];
+  }
 
-    $form['segment'] = array(
-        '#type' => 'machine_name',
-        '#required' => TRUE,
-        '#default_value' => $account->segment,
-        '#maxlength' => 255,
-        '#machine_name' => array(
-            'exists' => 'service_accounts_segment_exists',
-        ),
-        '#disabled' => !empty($account->segment),
-    );
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Account Name'),
+    '#description' => t('Give a name to identify each WeChat Service Account.'),
+    '#size' => 20,
+    '#default_value' => $account->name,
+    '#required' => TRUE,
+  );
 
-    $form['appid'] = array(
-        '#type' => 'textfield',
-        '#title' => t('AppID'),
-        '#size' => 20,
-        '#default_value' => $account->appid,
-        '#required' => TRUE,
-    );
+  $form['segment'] = array(
+    '#type' => 'machine_name',
+    '#required' => TRUE,
+    '#default_value' => $account->segment,
+    '#maxlength' => 255,
+    '#machine_name' => array(
+      'exists' => 'service_accounts_segment_exists',
+    ),
+    '#disabled' => !empty($account->segment),
+  );
 
-    $form['appsecret'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Secret'),
-        '#description' => t('Get this information from privilege management sub-page of settings page.<br>
+  $form['appid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('AppID'),
+    '#size' => 20,
+    '#default_value' => $account->appid,
+    '#required' => TRUE,
+  );
+
+  $form['appsecret'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Secret'),
+    '#description' => t('Get this information from privilege management sub-page of settings page.<br>
 Application has to be put in non-SystemAdmin group first, then use Secret of that group.'),
-        '#default_value' => $account->appsecret,
-        '#required' => TRUE,
-    );
+    '#default_value' => $account->appsecret,
+    '#required' => TRUE,
+  );
 
-    $form['token'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Token'),
-        '#default_value' => $account->token,
-        '#required' => TRUE,
-    );
+  $form['token'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Token'),
+    '#default_value' => $account->token,
+    '#required' => TRUE,
+  );
 
-    $form['actions'] = array('#type' => 'actions');
-    $form['actions']['submit'] = array(
-        '#type' => 'submit',
-        '#value' => t('Save Account'),
-    );
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save Account'),
+  );
 
-    return $form;
+  return $form;
 
 }
 
-function wechat_lite_service_account_form_submit ($form, &$form_state){
+function wechat_lite_service_account_form_submit($form, &$form_state) {
 
-    $account = array(
-        'name' => $form['name']['#value'],
-        'segment' => $form['segment']['#value'],
-        'appid' => $form['appid']['#value'],
-        'appsecret' => $form['appsecret']['#value'],
-        'token' => $form['token']['#value'],
-        'weight' => 0,
-    );
+  $account = array(
+    'name' => $form['name']['#value'],
+    'segment' => $form['segment']['#value'],
+    'appid' => $form['appid']['#value'],
+    'appsecret' => $form['appsecret']['#value'],
+    'token' => $form['token']['#value'],
+    'weight' => 0,
+  );
 
-    $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
-    $service_accounts[$account['segment']] = $account;
-    variable_set(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, $service_accounts);
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts[$account['segment']] = $account;
+  variable_set(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, $service_accounts);
 
-    $form_state['redirect'] = 'admin/config/system/wechat_lite/service_accounts';
+  $form_state['redirect'] = 'admin/config/system/wechat_lite/service_accounts';
 
 }
 
@@ -143,17 +147,66 @@ function wechat_lite_service_account_form_submit ($form, &$form_state){
  * @ingroup forms
  * @see system_settings_form().
  */
-function wechat_lite_service_accounts_settings() {
+function wechat_lite_service_accounts_settings($form, &$form_state) {
 
 
-    //$form['#tree'] = true;
+  $form['#tree'] = TRUE;
 
-    //$service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
+  $service_accounts = variable_get(VAR_WECHAT_LITE_SERVICE_ACCOUNTS, array());
 
-    $form['#submit'][] = 'wechat_lite_service_accounts_settings_submit';
+  $form['service_accounts']['#theme'] = "wechat_lite_service_accounts_settings";
 
-    return system_settings_form($form);
+  // Put array as raw table, need theme to render
+  foreach ($service_accounts as $segment => $account) {
+    $form['service_accounts'][$segment]['name'] = array('#markup' => drupal_placeholder($account['name']));
+    $form['service_accounts'][$segment]['segment'] = array('#markup' => url('wechat_lite/service_account/'.$segment.'/server', array('absolute'=>TRUE)));
+    $form['service_accounts'][$segment]['weight'] = array(
+      '#type' => 'textfield',
+      '#size' => 5,
+      '#default_value' => $account['weight'],
+      '#attributes' => array('class' => array('wechat-accounts-weight')),
+    );
 
+    $form['service_accounts'][$segment]['configure'] = array('#type' => 'link', '#title' => t('configure'), '#href' => 'admin/config/system/wechat_lite/service_accounts/' . $segment);
+  }
+
+  $form['#submit'][] = 'wechat_lite_service_accounts_settings_submit';
+
+  return system_settings_form($form);
+
+}
+
+function theme_wechat_lite_service_accounts_settings ($vars){
+
+
+  $element = $vars['element'];
+
+  drupal_add_tabledrag('sample_table', 'order', 'sibling', 'wechat-accounts-weight');
+
+  $header = array(
+    'name' => t('Account Name'),
+    'segment' => t('WeChat Callback URL'),
+    'weight' => t('Weight'),
+    'configure' => t('Edit'),
+  );
+
+  $rows = array();
+
+  foreach (element_children($element) as $key) {
+    $row = array();
+    $row['data'] = array();
+    foreach ($header as $fieldname => $title) {
+      $row['data'][] = drupal_render($element[$key][$fieldname]);
+      $row['class'] = array('draggable');
+    }
+    $rows[] = $row;
+  }
+
+  return theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => 'sample_table'),
+  ));
 }
 
 /**
@@ -165,15 +218,15 @@ function wechat_lite_service_accounts_settings() {
  * @param $form
  * @param $form_state
  */
-function wechat_lite_service_accounts_settings_validate ($form, &$form_state){
-    /*if($form['name']['#value'] == '')
-        form_set_error('name', 'Account name can not be empty.');
-    elseif($form['appid']['value'] == '')
-        form_set_error('appid', 'Appid can not be empty.');
-    elseif($form['appsecret']['value'] == '')
-        form_set_error('appid', 'Appsecret can not be empty.');
-    elseif($form['token']['value'] == '')
-        form_set_error('token', 'Token can not be empty.');*/
+function wechat_lite_service_accounts_settings_validate($form, &$form_state) {
+  /*if($form['name']['#value'] == '')
+      form_set_error('name', 'Account name can not be empty.');
+  elseif($form['appid']['value'] == '')
+      form_set_error('appid', 'Appid can not be empty.');
+  elseif($form['appsecret']['value'] == '')
+      form_set_error('appid', 'Appsecret can not be empty.');
+  elseif($form['token']['value'] == '')
+      form_set_error('token', 'Token can not be empty.');*/
 }
 
 /**
@@ -183,6 +236,6 @@ function wechat_lite_service_accounts_settings_validate ($form, &$form_state){
  * @param $form_state
  *
  */
-function wechat_lite_service_accounts_settings_submit ($form, &$form_state){
+function wechat_lite_service_accounts_settings_submit($form, &$form_state) {
 
 }
