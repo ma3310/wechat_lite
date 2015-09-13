@@ -78,6 +78,35 @@ function wechat_lite_menu() {
     'access callback' => TRUE,
   );
 
+  $items['admin/config/system/wechat_lite/enterprise_accounts'] = array(
+    'title' => 'Enterprise Accounts',
+    'description' => 'Configure WeChat Enterprise Accounts.',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wechat_lite_enterprise_accounts_settings'),
+    'file' => 'wechat_lite.admin.inc',
+    'access arguments' => array('administer site configuration'),
+  );
+
+  // Creates Add action link on parent page
+  $items['admin/config/system/wechat_lite/enterprise_accounts/add'] = array(
+    'title' => 'Add Enterprise Account',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 1,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wechat_lite_enterprise_account_form'),
+    'file' => 'wechat_lite.admin.inc',
+    'access arguments' => array('administer site configuration'),
+  );
+
+  $items['admin/config/system/wechat_lite/enterprise_accounts/%'] = array(
+    'title' => 'Edit Enterprise Account',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('wechat_lite_enterprise_account_form', 5),
+    'file' => 'wechat_lite.admin.inc',
+    'access arguments' => array('administer site configuration'),
+  );
+
   // enterprise account callback entry
   $items['wechat_lite/enterprise_account/%/server'] = array(
     'type' => MENU_CALLBACK,
