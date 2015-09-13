@@ -155,6 +155,7 @@ function wechat_lite_enterprise_account_form($form, &$form_state, $account_segme
       'name' => '',
       'segment' => '',
       'corpid' => '',
+      'appid' => '',
       'token' => '',
       'encodingAesKey' => '',
     );
@@ -196,6 +197,18 @@ TAG
     '#required' => TRUE,
   );
 
+  $form['appid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('AppID'),
+    '#description' => t(<<<'TAG'
+Get this information from application homepage.
+TAG
+    ),
+    '#size' => 20,
+    '#default_value' => $account->appid,
+    '#required' => TRUE,
+  );
+
   $form['token'] = array(
     '#type' => 'textfield',
     '#title' => t('Token'),
@@ -226,6 +239,7 @@ function wechat_lite_enterprise_account_form_submit($form, &$form_state) {
     'name' => $form['name']['#value'],
     'segment' => $form['segment']['#value'],
     'corpid' => $form['corpid']['#value'],
+    'appid' => $form['appid']['#value'],
     'token' => $form['token']['#value'],
     'encodingAesKey' => $form['encodingAesKey']['#value'],
     'weight' => 0,
