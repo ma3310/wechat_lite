@@ -103,7 +103,7 @@ function enterprise_account_server($segment) {
         $msg = (array)simplexml_load_string($decodedString, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         if ( $msg ['MsgType'] == 'image' ){
-          // Fetch image as
+
         }
 
         return;

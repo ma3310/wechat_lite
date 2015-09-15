@@ -1,0 +1,45 @@
+<?php
+/**
+ * Implements hook_enable().
+ */
+function wechat_lite_enable(){
+  // Setup vocabulary for WeChat Message Type
+  wechat_lite_prepare_vocabularies();
+}
+
+
+function wechat_lite_prepare_vocabularies(){
+
+  $vocabularies = array(
+    array(
+      'name' => 'WeChat Lite Message Type',
+      'machine_name' => 'wechat_lite_message_type',
+      'description' => 'Contains terms for WeChat Message Types'
+    ),
+    array(
+      'name' => 'WeChat Lite Account Type',
+      'machine_name' => 'wechat_lite_account_type',
+      'description' => 'Contains terms for WeChat Account Types'
+    ),
+
+  );
+
+  foreach ($vocabularies as $vocabulary){
+    $ret = taxonomy_vocabulary_machine_name_load($vocabulary['machine_name']);
+    if (!$ret && taxonomy_vocabulary_save((object)$vocabulary) === FALSE){
+      return $vocabulary['machine_name'];
+    }
+  }
+  return true;
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function wechat_lite_update_7000(&$sandbox) {
+  $ret = wechat_lite_prepare_vocabularies();
+  if ($ret !== true){
+    throw new DrupalUpdateException('Error for creating vocabulary: '.$ret);
+  }
+}
+

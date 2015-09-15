@@ -6,8 +6,14 @@ php = 5.3
 configure = admin/config/system/wechat_lite
 
 dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = views
 
 files[] = wechat_lite.admin.inc
 files[] = wechat_lite.module
 files[] = wechat_lite.service_account.inc
 files[] = wechat_lite.enterprise_account.inc
+
+
+
+
