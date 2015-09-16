@@ -5,6 +5,7 @@
 function wechat_lite_enable(){
   // Setup vocabulary for WeChat Message Type
   wechat_lite_prepare_vocabularies();
+  wechat_lite_prepare_terms();
 }
 
 
@@ -34,12 +35,55 @@ function wechat_lite_prepare_vocabularies(){
 }
 
 /**
+ *
+ */
+function wechat_lite_prepare_terms(){
+  $taxanomies = array(
+    'wechat_lite_message_type' => array(
+      'text',
+      'image',
+      'event',
+    ),
+    'wechat_lite_account_type' => array(
+      'Service Account',
+      'Enterprise Account',
+    ),
+  );
+
+  foreach (array_keys($taxanomies) as $vocabulary_machine_name){
+
+    $vocabulary = entity_metadata_wrapper(
+      'taxonomy_vocabulary',
+      taxonomy_vocabulary_machine_name_load($vocabulary_machine_name)
+    );
+
+    foreach ($taxanomies[$vocabulary_machine_name] as $term){
+      $data = array(
+        'name' => $term,
+        'vid' => $vocabulary->vid->value(),
+        'parent' => array(0),
+      );
+      $term_wrapper = entity_metadata_wrapper('taxonomy_term', entity_create('taxonomy_term', $data));
+
+      $term_wrapper->save();
+    }
+  }
+
+  return true;
+}
+
+/**
  * Implements hook_update_N().
  */
-function wechat_lite_update_7000(&$sandbox) {
+function wechat_lite_update_7001(&$sandbox) {
   $ret = wechat_lite_prepare_vocabularies();
   if ($ret !== true){
     throw new DrupalUpdateException('Error for creating vocabulary: '.$ret);
+  }
+
+  $ret = wechat_lite_prepare_terms();
+  if ($ret !== true){
+    throw new DrupalUpdateException('Error for creating terms.');
   }
 }
 
