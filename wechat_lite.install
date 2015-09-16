@@ -63,9 +63,12 @@ function wechat_lite_prepare_terms(){
         'vid' => $vocabulary->vid->value(),
         'parent' => array(0),
       );
-      $term_wrapper = entity_metadata_wrapper('taxonomy_term', entity_create('taxonomy_term', $data));
 
+      $term_wrapper = entity_metadata_wrapper('taxonomy_term', entity_create('taxonomy_term', $data));
       $term_wrapper->save();
+      /////////// Alternative implementation for learning purpose //////////////
+      // entity_save('taxonomy_term', entity_create('taxonomy_term', $data)); //
+      //////////////////////////////////////////////////////////////////////////
     }
   }
 
