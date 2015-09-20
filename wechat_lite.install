@@ -22,7 +22,7 @@ function wechat_lite_schema() {
         'description' => 'User ID who sent message.',
         'type' => 'int',
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'ToUserName' => array(
         'description' => 'User Name / OpenID which the message is sent to ',
@@ -31,16 +31,10 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'AgentId' => array(
-        'description' => 'Application ID from which message is sent.',
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => '0',
-      ),
       'MsgId' => array(
         'description' => 'Message ID managed by WeChat / Tencent.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 50,
         'not null' => TRUE,
         'default' => '',
       ),
@@ -50,6 +44,12 @@ function wechat_lite_schema() {
         'length' => 32,
         'not null' => TRUE,
         'default' => '',
+      ),
+      'AgentId' => array(
+        'description' => 'Application ID from which message is sent.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
       ),
       'status' => array(
         'description' => 'The status of message; -1: error, 0:received, 6: attached media fetched,',
@@ -74,9 +74,9 @@ function wechat_lite_schema() {
       'wechat_lite_message_updated' => array('updated'),
       'wechat_lite_message_created' => array('created'),
       'wechat_lite_message_ToUserName' => array(array('ToUserName', 20)),
-      'wechat_lite_message_MsgType' => array(array('MsgType', 20)),
+      'wechat_lite_message_MsgType' => array(array('MsgType', 10)),
       'wechat_lite_message_status' => array('status'),
-      'wechat_lite_message_author' => array('author_uid'),
+      'wechat_lite_message_author' => array('uid'),
     ),
     'unique keys' => array(
       'wechat_lite_message_msgid' => array('MsgId'),
@@ -84,7 +84,7 @@ function wechat_lite_schema() {
     'foreign keys' => array(
       'wechat_lite_message_author' => array(
         'table' => 'users',
-        'columns' => array('author_uid' => 'uid'),
+        'columns' => array('uid' => 'uid'),
       ),
     ),
     'primary key' => array('mid'),
@@ -193,14 +193,14 @@ function wechat_lite_prepare_terms(){
  * Implements hook_update_N().
  */
 function wechat_lite_update_7001(&$sandbox) {
-  $ret = wechat_lite_prepare_vocabularies();
-  if ($ret !== true){
-    throw new DrupalUpdateException('Error for creating vocabulary: '.$ret);
-  }
-
-  $ret = wechat_lite_prepare_terms();
-  if ($ret !== true){
-    throw new DrupalUpdateException('Error for creating terms.');
-  }
+//  $ret = wechat_lite_prepare_vocabularies();
+//  if ($ret !== true){
+//    throw new DrupalUpdateException('Error for creating vocabulary: '.$ret);
+//  }
+//
+//  $ret = wechat_lite_prepare_terms();
+//  if ($ret !== true){
+//    throw new DrupalUpdateException('Error for creating terms.');
+//  }
 }
 
