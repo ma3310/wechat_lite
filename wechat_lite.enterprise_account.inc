@@ -52,9 +52,10 @@ function enterprise_account_server($segment) {
         );
 
         if ($errCode == ErrorCode::$OK) {
+          // returns echo string when verify callback URL
           echo ($decodedString);
 
-          return;
+          return MENU_FOUND;
         }
         else {
           watchdog(

@@ -157,6 +157,7 @@ function wechat_lite_enterprise_account_form($form, &$form_state, $account_segme
       'corpid' => '',
       'appid' => '',
       'token' => '',
+      'appsecret' => '',
       'encodingAesKey' => '',
     );
   }
@@ -213,6 +214,18 @@ TAG
     '#type' => 'textfield',
     '#title' => t('Token'),
     '#default_value' => $account->token,
+    '#required' => TRUE,
+  );
+
+  $form['appsecret'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Secret'),
+    '#description' => t(<<<'TAG'
+Get this information from privilege management sub-page of settings page.<br>
+Application has to be put in non-SystemAdmin group first, then use Secret of that group.
+TAG
+    ),
+    '#default_value' => $account->appsecret,
     '#required' => TRUE,
   );
 
