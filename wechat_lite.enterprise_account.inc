@@ -105,18 +105,22 @@ function enterprise_account_server($segment) {
 
         $data = array();
 
-        $data['MsgId'] = $msg['MsgId'];
-        $data['ToUserName'] = $msg['ToUserName'];
-        $data['MsgType'] = $msg['MsgType'];
-
-        $wrapper = entity_metadata_wrapper('wechat_lite_message', entity_create('wechat_lite_message', $data));
-
-
-        if ( $msg ['MsgType'] == 'image' ){
-
-        }
-
         if ($msg ['MsgType'] != 'event'){
+
+          $data['MsgId'] = $msg['MsgId'];
+          $data['ToUserName'] = $msg['ToUserName'];
+          $data['MsgType'] = $msg['MsgType'];
+          $data['AgentID'] = $msg['AgentID'];
+          $data['CreateTime'] = $msg['CreateTime'];
+
+          $wrapper = entity_metadata_wrapper('wechat_lite_message', entity_create('wechat_lite_message', $data));
+
+          if ( $msg ['MsgType'] == 'image' ){
+
+            $data['PicUrl'] = $msg['PicUrl'];
+            $data['MediaId'] = $msg['MediaId'];
+
+          }
           $wrapper->save();
         }
         // Event could be handled immediately

@@ -14,7 +14,7 @@ require_once realpath(dirname(__FILE__)) . '/include/common.inc';
  */
 function wechat_lite_schema() {
   $schema['wechat_lite_message'] = array(
-    'description' => 'WeChat Messages managed by Drupal.',
+    'description' => 'WeChat Messages managed by Drupal, which are received from WeChat Server.',
     'fields' => array(
       'mid' => array(
         'description' => 'Message ID Drupal managed.',
@@ -35,6 +35,13 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
+      'FromUserName' => array(
+        'description' => 'User Name who sent message ',
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+      ),
       'MsgId' => array(
         'description' => 'Message ID managed by WeChat / Tencent.',
         'type' => 'varchar',
@@ -49,14 +56,40 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
+      'PicUrl' => array(
+        'description' => 'URL of image',
+        'type' => 'varchar',
+        'length' => 512,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'MediaId' => array(
+        'description' => 'Media ID',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'last_event' => array(
+        'description' => 'Last selected event ID.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '',
+      ),
       'AgentId' => array(
         'description' => 'Application ID from which message is sent.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
       ),
+      'CreateTime' => array(
+        'description' => 'The Unix timestamp of WeChat Message.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'status' => array(
-        'description' => 'The status of message; -1: error, 0:received, 6: attached media fetched,',
+        'description' => 'The status of message; -1: error, 0:received, 6: media fetched, 8: processed',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
