@@ -10,6 +10,7 @@ require_once realpath(dirname(__FILE__)) . '/include/common.inc';
 /**
  * Implements hook_schema().
  * @See https://www.drupal.org/node/146939 Schema Reference
+ * @See https://www.drupal.org/node/146862 Quick Start Guide
  */
 function wechat_lite_schema() {
   $schema['wechat_lite_message'] = array(
@@ -92,6 +93,10 @@ function wechat_lite_schema() {
     ),
     'primary key' => array('mid'),
   );
+
+  /////////////////////// table manual creation ////////////////////////////////
+  // db_create_table('wechat_lite_message', $schema['wechat_lite_message']);
+  //////////////////////////////////////////////////////////////////////////////
 
   return $schema;
 
