@@ -136,7 +136,16 @@ function wechat_lite_entity_info() {
     'fieldable' => true,
     'entity keys' => array(
       'id' => 'mid',
-      'label' => 'MsgId'
+      'label' => 'MsgId',
+      'bundle' => 'MsgType',
+    ),
+    'bundles' => array(
+      'text' => array(
+        'label' => 'text',
+      ),
+      'image' => array(
+        'label' => 'image',
+      ),
     ),
 
   );

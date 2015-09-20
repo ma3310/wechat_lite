@@ -110,13 +110,21 @@ function enterprise_account_server($segment) {
         $data['MsgType'] = $msg['MsgType'];
 
         $wrapper = entity_metadata_wrapper('wechat_lite_message', entity_create('wechat_lite_message', $data));
-        $wrapper->save();
+
 
         if ( $msg ['MsgType'] == 'image' ){
 
         }
 
-        return;
+        if ($msg ['MsgType'] != 'event'){
+          $wrapper->save();
+        }
+        // Event could be handled immediately
+        else {
+
+        }
+
+        return MENU_FOUND;
       }
       // DecryptMsg failed
       else {
