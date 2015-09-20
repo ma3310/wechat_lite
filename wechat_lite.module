@@ -119,6 +119,31 @@ function wechat_lite_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_entity_info().
+ *
+ * @See https://www.drupal.org/node/1026420 How to create a new entity type
+ */
+function wechat_lite_entity_info() {
+  $info = array();
+  $info['wechat_lite_message'] = array(
+    'label' => t('WeChat Lite Message'),
+    'plural label' => t('WeChat Lite Messages'),
+    'description' => t('WeChat Lite Message basic definition'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'wechat_lite_message',
+    'fieldable' => true,
+    'entity keys' => array(
+      'id' => 'mid',
+      'label' => 'MsgId'
+    ),
+
+  );
+
+  return $info;
+}
+
 function _wechat_lite_init_obj() {
   $wechat_lite_obj = &drupal_static(__FUNCTION__);
   if (!isset($wechat_lite_obj)) {

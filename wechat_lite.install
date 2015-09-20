@@ -1,4 +1,7 @@
 <?php
+
+require_once realpath(dirname(__FILE__)) . '/include/common.inc';
+
 /**
  * @file
  * Schema and installation hooks for wechat_lite module.
