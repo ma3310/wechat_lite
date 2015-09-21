@@ -147,6 +147,8 @@ function wechat_lite_entity_info() {
         'label' => 'image',
       ),
     ),
+//  'uri callback' => 'entity_class_uri',
+    'module' => 'wechat_lite',
 
   );
 

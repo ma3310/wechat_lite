@@ -70,12 +70,6 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'last_event' => array(
-        'description' => 'Last selected event ID.',
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => '',
-      ),
       'AgentId' => array(
         'description' => 'Application ID from which message is sent.',
         'type' => 'int',
@@ -88,8 +82,14 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'selected_event' => array(
+        'description' => 'Last selected event ID.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
       'status' => array(
-        'description' => 'The status of message; -1: error, 0:received, 6: media fetched, 8: processed',
+        'description' => 'The status of message; -1: error, 0: received, 6: media fetched, 8: processed selected event',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
@@ -140,6 +140,9 @@ function wechat_lite_schema() {
  */
 function wechat_lite_enable(){
   // Setup vocabulary for WeChat Message Type
+
+  return; // TODO: reconsider if below is needed.
+
   if (wechat_lite_prepare_vocabularies()){
     wechat_lite_prepare_terms();
   }

@@ -5,6 +5,7 @@ require_once realpath(dirname(__FILE__)) . '/include/WXBizMsgCrypt.php';
 
 /**
  * @param $segment string
+ * @return int|void
  */
 function enterprise_account_server($segment) {
 
@@ -55,7 +56,7 @@ function enterprise_account_server($segment) {
           // returns echo string when verify callback URL
           echo ($decodedString);
 
-          return MENU_FOUND;
+          return MENU_SITE_ONLINE;
         }
         else {
           watchdog(
@@ -64,7 +65,7 @@ function enterprise_account_server($segment) {
             array('%errCode' => $errCode)
           );
 
-          return;
+          return MENU_FOUND;
         }
       }
       // Verify Echo String -->
@@ -73,7 +74,7 @@ function enterprise_account_server($segment) {
       $postData = file_get_contents("php://input");
 
       if (!isset($postData) || empty($postData)){
-        return;
+        return MENU_FOUND;
       }
 
       watchdog(
@@ -112,8 +113,9 @@ function enterprise_account_server($segment) {
           $data['MsgType'] = $msg['MsgType'];
           $data['AgentID'] = $msg['AgentID'];
           $data['CreateTime'] = $msg['CreateTime'];
+          $data['created'] = REQUEST_TIME;
+          $data['updated'] = REQUEST_TIME;
 
-          $wrapper = entity_metadata_wrapper('wechat_lite_message', entity_create('wechat_lite_message', $data));
 
           if ( $msg ['MsgType'] == 'image' ){
 
@@ -121,6 +123,11 @@ function enterprise_account_server($segment) {
             $data['MediaId'] = $msg['MediaId'];
 
           }
+          else if ($msg ['MsgType'] == 'text'){
+
+          }
+
+          $wrapper = entity_metadata_wrapper('wechat_lite_message', entity_create('wechat_lite_message', $data));
           $wrapper->save();
         }
         // Event could be handled immediately
@@ -128,7 +135,7 @@ function enterprise_account_server($segment) {
 
         }
 
-        return MENU_FOUND;
+        return MENU_SITE_ONLINE;
       }
       // DecryptMsg failed
       else {
@@ -138,7 +145,7 @@ function enterprise_account_server($segment) {
           array('%errCode' => $errCode)
         );
 
-        return;
+        return MENU_FOUND;
       }
 
     }
