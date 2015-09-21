@@ -82,8 +82,14 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'fid' => array(
+        'description' => 'internal File ID',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
       'selected_event' => array(
-        'description' => 'Last selected event ID.',
+        'description' => 'Selected event ID.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 1,
@@ -111,8 +117,11 @@ function wechat_lite_schema() {
       'wechat_lite_message_updated' => array('updated'),
       'wechat_lite_message_created' => array('created'),
       'wechat_lite_message_ToUserName' => array(array('ToUserName', 20)),
+      'wechat_lite_message_FromUserName' => array(array('FromUserName', 20)),
       'wechat_lite_message_MsgType' => array(array('MsgType', 10)),
       'wechat_lite_message_status' => array('status'),
+      'wechat_lite_message_selected_event' => array('selected_event'),
+      'wechat_lite_message_AgentID' => array('AgentID'),
       'wechat_lite_message_author' => array('uid'),
     ),
     'unique keys' => array(

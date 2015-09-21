@@ -110,6 +110,7 @@ function enterprise_account_server($segment) {
 
           $data['MsgId'] = $msg['MsgId'];
           $data['ToUserName'] = $msg['ToUserName'];
+          $data['FromUserName'] = $msg['FromUserName'];
           $data['MsgType'] = $msg['MsgType'];
           $data['AgentID'] = $msg['AgentID'];
           $data['CreateTime'] = $msg['CreateTime'];
