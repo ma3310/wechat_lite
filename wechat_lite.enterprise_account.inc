@@ -108,9 +108,12 @@ function enterprise_account_server($segment) {
 
         if ($msg ['MsgType'] != 'event'){
 
+
           $data['MsgId'] = $msg['MsgId'];
           $data['ToUserName'] = $msg['ToUserName'];
           $data['FromUserName'] = $msg['FromUserName'];
+          // TODO get real uid per FromUserName
+          $data['uid'] = 1;
           $data['MsgType'] = $msg['MsgType'];
           $data['AgentID'] = $msg['AgentID'];
           $data['CreateTime'] = $msg['CreateTime'];

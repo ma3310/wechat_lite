@@ -5,6 +5,7 @@
  * Module entry file.
  *
  */
+require_once realpath(dirname(__FILE__)) . '/include/common.inc';
 
 /**
  * Implements hook_menu().
@@ -153,6 +154,63 @@ function wechat_lite_entity_info() {
   );
 
   return $info;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function wechat_lite_cron() {
+
+  watchdog(
+    MODULE_NAME,
+    "wechat_lite_cron start: %date",
+    array('%date' => date_format(date_now('Asia/Shanghai'),'Y-m-d H:i:s'))
+  );
+
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'wechat_lite_message', '=')
+    ->entityCondition('bundle', 'image')
+    ->propertyCondition('status', 0, '=')
+  ;
+
+  $result = $query->execute();
+
+  $messageIDs = array_keys($result['wechat_lite_message']);;
+
+  $messages = entity_load('wechat_lite_message', $messageIDs);
+
+  foreach ($messages as $msg){
+
+    try {
+      $file = media_parse_to_file($msg->PicUrl);
+    }
+    catch (Exception $e) {
+
+      watchdog(
+        MODULE_NAME,
+        __FUNCTION__." fetch error: %mid",
+        array('%mid' => $msg->mid)
+      );
+
+      continue;
+    }
+
+
+    // data need be stored as private
+    $uri = file_stream_wrapper_uri_normalize('private://' . $file->filename . '.jpg');
+    $file = file_move($file, $uri);
+
+    $msg->fid = $file->fid;
+
+    $msg->save();
+  }
+
+  watchdog(
+    MODULE_NAME,
+    "wechat_lite_cron end: %date",
+    array('%date' => date_format(date_now('Asia/Shanghai'),'Y-m-d H:i:s'))
+  );
 }
 
 function _wechat_lite_init_obj() {

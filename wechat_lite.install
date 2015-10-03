@@ -70,7 +70,7 @@ function wechat_lite_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'AgentId' => array(
+      'AgentID' => array(
         'description' => 'Application ID from which message is sent.',
         'type' => 'int',
         'not null' => TRUE,
